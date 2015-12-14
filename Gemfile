@@ -48,7 +48,7 @@ group :development do
 
   group :test do
     gem 'shoulda-matchers', '~> 3.0'
-    gem 'factory_girl'
+    gem 'factory_girl_rails'
   end
 end
 
