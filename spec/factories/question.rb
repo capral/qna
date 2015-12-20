@@ -1,11 +1,6 @@
-FactoryGirl.define do
-  factory :question do
-    title "My question"
-    body "question body"
-  end
+class Question < ActiveRecord::Base
+  belongs_to :user
+  has_many :answers, dependent: :destroy
 
-  factory :invalid_question, class: 'Question' do
-    title nil
-    body nil
-  end
+  validates :title, :user_id, :body, presence: true
 end

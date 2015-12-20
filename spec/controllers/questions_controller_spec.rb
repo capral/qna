@@ -10,7 +10,8 @@ RSpec.describe QuestionsController, type: :controller do
 
     it 'loads all questions' do
       questions = create_list(:question, 3)
-      expect(assigns(:questions)).to eq questions
+      # expect(assigns(:questions)).to eq questions
+      expect(controller.instance_variable_get(:@questions)).to  eq questions
     end
 
     it 'renders index template' do
