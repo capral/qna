@@ -6,11 +6,12 @@ RSpec.describe QuestionsController, type: :controller do
   let(:user) { create(:user) }
 
   describe "GET #index" do
+    let!(:questions) { create_list(:question, 3) }
     before { get :index }
 
     it 'loads all questions' do
-      questions = create_list(:question, 3)
-      expect(assigns(:questions)).to eq questions
+      #expect(assigns(:questions)).to eq questions
+       expect(controller.instance_variable_get(:@questions)).to eq questions
     end
 
     it 'renders index template' do
@@ -125,8 +126,11 @@ RSpec.describe QuestionsController, type: :controller do
   describe "DELETE #destroy" do
     before do
       login(user)
-      question
     end
+
+    context "author deletes his own question" do
+      let!(:question)  { create(:question, user: user) }
+
 
     it 'deletes question from DB' do
       expect { delete :destroy, id: question }.to change(Question, :count).by(-1)
@@ -135,6 +139,14 @@ RSpec.describe QuestionsController, type: :controller do
     it 'redirects to index' do
       delete :destroy, id: question
       expect(response).to redirect_to questions_path
+      end
+    end
+
+    context 'does not delete question from DB' do
+        before { question }
+        it 'deletes question from DB' do
+        expect { delete :destroy, id: question }.to_not change(Question, :count)
+      end
     end
   end
 end
