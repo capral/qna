@@ -18,17 +18,17 @@ class AnswersController < ApplicationController
         format.js
         format.json { render json: @answer.errors.full_messages, status: :unprocessable_entity }
       end
-end
-end
+    end
+  end
 
-private
+  private
 
-def answer_params
-  params.require(:answer).permit(:body)
-end
+  def answer_params
+    params.require(:answer).permit(:body, attachments_attributes: [:file])
+  end
 
-def check_user
-  head :forbidden unless current_user.author_of?(@answer)
-  # render nothing: true, status: :forbidden
-end
+  def check_user
+    head :forbidden unless current_user.author_of?(@answer)
+    # render nothing: true, status: :forbidden
+  end
 end

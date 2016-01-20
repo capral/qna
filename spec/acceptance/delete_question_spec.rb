@@ -10,7 +10,7 @@ feature 'Delete question' do
 
     click_on "Delete"
 
-    expect(current_path).to eq question_path
+    expect(current_path).to eq questions_path
     expect(page).to_not have_content question.title
   end
 

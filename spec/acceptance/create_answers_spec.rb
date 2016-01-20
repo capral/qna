@@ -10,6 +10,7 @@ feature 'User answer', %q{
   given!(:question) { create(:question) }
 
   scenario 'Authenticated user create answer', js: true do
+    Capybara.current_driver = :selenium
     login(user)
     visit question_path(question)
 

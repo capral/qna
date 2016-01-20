@@ -43,6 +43,10 @@ group :development, :test do
   gem 'selenium-webdriver'
   gem 'database_cleaner'
   gem 'poltergeist'
+  gem 'carrierwave'
+  gem 'remotipart'
+  gem 'omniauth'
+  gem 'omniauth-facebook'
 end
   group :test do
     gem 'shoulda-matchers', '~> 3.0'
