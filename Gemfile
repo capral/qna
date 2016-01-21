@@ -47,6 +47,8 @@ group :development, :test do
   gem 'remotipart'
   gem 'omniauth'
   gem 'omniauth-facebook'
+  gem 'omniauth-github'
+
 end
   group :test do
     gem 'shoulda-matchers', '~> 3.0'
