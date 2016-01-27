@@ -48,6 +48,7 @@ group :development, :test do
   gem 'omniauth'
   gem 'omniauth-facebook'
   gem 'omniauth-github'
+  gem 'cancancan'
 
 end
   group :test do
