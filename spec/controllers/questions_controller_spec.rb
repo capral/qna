@@ -1,17 +1,17 @@
-
 require 'rails_helper'
 
 RSpec.describe QuestionsController, type: :controller do
-  let(:question) { create(:question) }
-  let(:user) { create(:user) }
+  let!(:question) { create(:question) }
+  let!(:user) { create(:user) }
+
 
   describe "GET #index" do
     let!(:questions) { create_list(:question, 3) }
     before { get :index }
 
     it 'loads all questions' do
-      #expect(assigns(:questions)).to eq questions
-       expect(controller.instance_variable_get(:@questions)).to eq questions
+      # expect(controller.instance_variable_get(:@questions)).to eq questions
+      expect(assigns(:questions)).to eq questions
     end
 
     it 'renders index template' do
@@ -96,7 +96,7 @@ RSpec.describe QuestionsController, type: :controller do
     before { login(user) }
 
     context 'valid' do
-      before { patch :update, id: question, question: { title: 'new title', body: 'new body' } }
+      before { patch :update, id: question, question: {title: 'new title', body: 'new body' }}
       it 'changes question' do
         question.reload
         expect(question.title).to eq 'new title'
@@ -109,7 +109,7 @@ RSpec.describe QuestionsController, type: :controller do
     end
 
     context 'invalid' do
-      before { patch :update, id: question, question: { title: nil, body: nil } }
+      before { patch :update, id: question, question: {title: nil, body: nil }}
 
       it 'does not change question attributes' do
         question.reload
@@ -129,24 +129,35 @@ RSpec.describe QuestionsController, type: :controller do
     end
 
     context "author deletes his own question" do
-      let!(:question)  { create(:question, user: user) }
+      let!(:question) { create(:question, user: user) }
 
+      it 'deletes question from DB' do
+        expect { delete :destroy, id: question }.to change(Question, :count).by(-1)
+      end
 
-    it 'deletes question from DB' do
-      expect { delete :destroy, id: question }.to change(Question, :count).by(-1)
-    end
-
-    it 'redirects to index' do
-      delete :destroy, id: question
-      expect(response).to redirect_to questions_path
+      it 'redirects to index' do
+        delete :destroy, id: question
+        expect(response).to redirect_to questions_path
       end
     end
 
-    context 'does not delete question from DB' do
-        before { question }
-        it 'deletes question from DB' do
+    context 'non-author can not delete question' do
+      before { question }
+
+      it 'does not delete question from DB' do
         expect { delete :destroy, id: question }.to_not change(Question, :count)
       end
+    end
+  end
+
+  describe "POST /vote_up" do
+    before { login(user) }
+
+    it 'calls Question#vote_up method' do
+      question = create(:question)
+      allow(Question).to receive(:find).and_return(question)
+      expect(question).to receive(:vote_up).with(user)
+      post :vote_up, id: question
     end
   end
 end

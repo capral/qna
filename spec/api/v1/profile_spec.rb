@@ -2,6 +2,8 @@ require 'rails_helper'
 
 RSpec.describe "Profiles API" do
   describe "GET /me" do
+    it_behaves_like "API Authenticable"
+
     context "unauthorized" do
       it 'returns 401 status if request has not access token' do
         get '/api/v1/profiles/me', format: :json
