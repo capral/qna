@@ -1,5 +1,5 @@
 class Reputation
   def self.calculate(vote)
-    sleep(5)
+    sleep(3)
   end
 end
